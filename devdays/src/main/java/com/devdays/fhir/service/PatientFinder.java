@@ -25,7 +25,7 @@ public class PatientFinder implements IFinder {
 	 * creates the client connection.
 	 */
 	public PatientFinder() {
-		ClientContext context = new ClientContext(SpringConfigurer.getContext());
+		this.context = new ClientContext(SpringConfigurer.getContext());
 		context.createClient(Constants.CLIENT_RESTFUL_URL);
 	}
 
