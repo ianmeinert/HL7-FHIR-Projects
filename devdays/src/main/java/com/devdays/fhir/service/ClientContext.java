@@ -7,6 +7,7 @@ import org.hl7.fhir.r4.model.Patient;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
+import ca.uhn.fhir.rest.client.interceptor.LoggingInterceptor;
 import ca.uhn.fhir.rest.gclient.StringClientParam;
 
 /**
@@ -45,7 +46,8 @@ public class ClientContext {
 	public void createClient(String url) {
 		// Create a client
 		this.client = context.newRestfulGenericClient(url);
-
+		// Create a logging interceptor
+		client.registerInterceptor(this.setLoggingInterceptor(true, true));
 	}
 
 	/**
@@ -78,5 +80,22 @@ public class ClientContext {
 				.include(new Include("AllergyIntolerance:recorder")).returnBundle(Bundle.class).execute();
 
 		return bundle;
+	}
+
+	/**
+	 * This method will set the FHIR logging interceptor
+	 * @param doSetSummary boolean value to log the request summary
+	 * @param doSetBody boolean value to log the request body
+	 * @return
+	 */
+	private LoggingInterceptor setLoggingInterceptor(boolean doSetSummary, boolean doSetBody) {
+		// Create a logging interceptor
+		LoggingInterceptor loggingInterceptor = new LoggingInterceptor();
+
+		// Configure the interceptor using the provided properties.
+		loggingInterceptor.setLogRequestSummary(doSetSummary);
+		loggingInterceptor.setLogRequestBody(doSetBody);
+
+		return loggingInterceptor;
 	}
 }
