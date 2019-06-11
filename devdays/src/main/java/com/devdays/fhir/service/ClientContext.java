@@ -64,14 +64,15 @@ public class ClientContext {
 		return client.read().resource(Patient.class).withId(id).execute();
 	}
 
-	public Boolean createPatient(Patient patient) {
+	public String createPatient(Patient patient) {
+		
 		// Invoke the server create method (and send pretty-printed JSON encoding to the
 		// server instead of the default which is non-pretty printed XML)
 		MethodOutcome outcome = client.create().resource(patient).execute();
 
 		// This will return Boolean.TRUE if the server responded with an HTTP 201
 		// created, otherwise it will return null.
-		return outcome.getCreated();
+		return outcome.getId().getIdPart();
 	}
 
 	/**

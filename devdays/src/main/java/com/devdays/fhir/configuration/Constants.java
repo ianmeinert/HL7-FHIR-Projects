@@ -28,4 +28,6 @@ public class Constants {
 	 * This is the public HL7 R4 test server path.
 	 */
 	public static final String CLIENT_RESTFUL_URL = "http://fhirtest.uhn.ca/baseR4";
+
+	public static final String SYSTEM_ID = "ICU-812";
 }

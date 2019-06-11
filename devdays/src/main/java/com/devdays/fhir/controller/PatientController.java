@@ -53,14 +53,15 @@ public class PatientController {
 	 * @param ucBuilder a UriComponentsBuilder
 	 */
 	@PostMapping()
-	public ResponseEntity<Void> createPatient(@RequestBody Patient patient, UriComponentsBuilder ucBuilder) {
-		System.out.println("Creating Patient " + patient.getFullName());
+	public ResponseEntity<String> createPatient(@RequestBody Patient patient, UriComponentsBuilder ucBuilder) {
+		System.out.println("Creating Patient: " + patient.getFullName());
 		PatientFinder finder = new PatientFinder();
 
 		finder.createPatient(patient);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("/patient/{id}").buildAndExpand(patient.getId()).toUri());
-		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+		
+		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
 	}
 }

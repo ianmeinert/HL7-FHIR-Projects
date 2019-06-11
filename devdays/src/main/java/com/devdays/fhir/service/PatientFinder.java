@@ -53,12 +53,14 @@ public class PatientFinder implements IFinder {
 
 		// ..populate the patient object..
 		fp.setActive(Boolean.TRUE);
-		fp.addIdentifier().setSystem("urn:system").setValue(patient.getId());
+		fp.addIdentifier().setSystem("urn:system").setValue(Constants.SYSTEM_ID);
 		fp.addName().addGiven(patient.getGivenName()).setFamily(patient.getFamilyName());
 		fp.setBirthDate(DateUtility.asDate(patient.getDob()));
 		
-		this.context.createPatient(fp);
-
+		// The resulting id
+		String id = this.context.createPatient(fp);
+		
+		patient.setId(id);
 	}
 
 }
