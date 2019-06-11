@@ -1,14 +1,16 @@
 package com.devdays.fhir.service;
 
+import org.hl7.fhir.instance.model.api.IIdType;
 import org.hl7.fhir.r4.model.AllergyIntolerance;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Patient;
+
+import com.devdays.fhir.configuration.ClientInterceptor;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
-import ca.uhn.fhir.rest.client.interceptor.LoggingInterceptor;
 import ca.uhn.fhir.rest.gclient.StringClientParam;
 
 /**
@@ -47,8 +49,6 @@ public class ClientContext {
 	public void createClient(String url) {
 		// Create a client
 		this.client = context.newRestfulGenericClient(url);
-		// Create a logging interceptor
-		client.registerInterceptor(this.setLoggingInterceptor(true, true));
 	}
 
 	/**
@@ -59,16 +59,18 @@ public class ClientContext {
 	 * @return {@link Patient}
 	 */
 	public Patient readPatient(String id) {
-
 		// Read a patient with the given ID
 		return client.read().resource(Patient.class).withId(id).execute();
 	}
 
 	public String createPatient(Patient patient) {
-		
+
 		// Invoke the server create method (and send pretty-printed JSON encoding to the
 		// server instead of the default which is non-pretty printed XML)
 		MethodOutcome outcome = client.create().resource(patient).execute();
+
+		// log the outcome using the ClientInterceptor
+		this.setLoggingInterceptor(outcome);
 
 		// This will return Boolean.TRUE if the server responded with an HTTP 201
 		// created, otherwise it will return null.
@@ -94,21 +96,22 @@ public class ClientContext {
 		return bundle;
 	}
 
+	public void updatePatient(Patient fp) {
+		// Invoke the server update method
+		MethodOutcome outcome = client.update().resource(fp).execute();
+
+		IIdType id = outcome.getId();
+		System.out.println("Updated ID: " + id.getValue());
+
+	}
+
 	/**
 	 * This method will set the FHIR logging interceptor
 	 * 
-	 * @param doSetSummary boolean value to log the request summary
-	 * @param doSetBody    boolean value to log the request body
-	 * @return
+	 * @param outcome the {@link MethodOutcome}
 	 */
-	private LoggingInterceptor setLoggingInterceptor(boolean doSetSummary, boolean doSetBody) {
-		// Create a logging interceptor
-		LoggingInterceptor loggingInterceptor = new LoggingInterceptor();
-
-		// Configure the interceptor using the provided properties.
-		loggingInterceptor.setLogRequestSummary(doSetSummary);
-		loggingInterceptor.setLogRequestBody(doSetBody);
-
-		return loggingInterceptor;
+	private void setLoggingInterceptor(MethodOutcome outcome) {
+		ClientInterceptor interceptor = new ClientInterceptor();
+		interceptor.interceptRequest(outcome);
 	}
 }
