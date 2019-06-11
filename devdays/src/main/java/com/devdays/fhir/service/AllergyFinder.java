@@ -81,5 +81,4 @@ public class AllergyFinder implements IFinder {
 
 		return gson.toJson(as);
 	}
-
 }

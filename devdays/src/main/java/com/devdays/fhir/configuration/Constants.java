@@ -12,11 +12,17 @@ public class Constants {
 	/**
 	 * The patient id used within the RESTful entry point.
 	 */
-	public static final String ENTRY_PATH_ID = "{id}";
+	public static final String ENTRY_PATH_PATIENT = "/patient";
+	
+	/**
+	 * The patient id used within the RESTful entry point.
+	 */
+	public static final String ENTRY_PATH_PATIENT_ID = "/{id}";
+	
 	/**
 	 * The allergies RESTful entry point.
 	 */
-	public static final String ENTRY_PATH_ALLERGY = ENTRY_PATH_ID + "/allergies";
+	public static final String ENTRY_PATH_ALLERGY = "/allergies";
 
 	/**
 	 * This is the public HL7 R4 test server path.
