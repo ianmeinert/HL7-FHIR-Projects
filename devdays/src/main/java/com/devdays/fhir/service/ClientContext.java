@@ -6,6 +6,7 @@ import org.hl7.fhir.r4.model.Patient;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
+import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.client.interceptor.LoggingInterceptor;
 import ca.uhn.fhir.rest.gclient.StringClientParam;
@@ -63,6 +64,16 @@ public class ClientContext {
 		return client.read().resource(Patient.class).withId(id).execute();
 	}
 
+	public Boolean createPatient(Patient patient) {
+		// Invoke the server create method (and send pretty-printed JSON encoding to the
+		// server instead of the default which is non-pretty printed XML)
+		MethodOutcome outcome = client.create().resource(patient).execute();
+
+		// This will return Boolean.TRUE if the server responded with an HTTP 201
+		// created, otherwise it will return null.
+		return outcome.getCreated();
+	}
+
 	/**
 	 * This method sends a search request to the {@link IGenericClient} for a
 	 * {@link AllergyIntolerance} resource.
@@ -84,8 +95,9 @@ public class ClientContext {
 
 	/**
 	 * This method will set the FHIR logging interceptor
+	 * 
 	 * @param doSetSummary boolean value to log the request summary
-	 * @param doSetBody boolean value to log the request body
+	 * @param doSetBody    boolean value to log the request body
 	 * @return
 	 */
 	private LoggingInterceptor setLoggingInterceptor(boolean doSetSummary, boolean doSetBody) {

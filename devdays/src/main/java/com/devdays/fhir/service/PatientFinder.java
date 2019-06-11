@@ -40,11 +40,25 @@ public class PatientFinder implements IFinder {
 
 		Patient p = new Patient();
 
-		p.setName(fp.getNameFirstRep().getNameAsSingleString());
+		p.setGivenName(fp.getNameFirstRep().getGivenAsSingleString());
+		p.setFamilyName(fp.getNameFirstRep().getFamily());
 		p.setId(fp.getIdElement().getId());
 		p.setDob(DateUtility.asLocalDate(fp.getBirthDate()));
 
 		return gson.toJson(p);
+	}
+
+	public void createPatient(Patient patient) {
+		org.hl7.fhir.r4.model.Patient fp = new org.hl7.fhir.r4.model.Patient();
+
+		// ..populate the patient object..
+		fp.setActive(Boolean.TRUE);
+		fp.addIdentifier().setSystem("urn:system").setValue(patient.getId());
+		fp.addName().addGiven(patient.getGivenName()).setFamily(patient.getFamilyName());
+		fp.setBirthDate(DateUtility.asDate(patient.getDob()));
+		
+		this.context.createPatient(fp);
+
 	}
 
 }

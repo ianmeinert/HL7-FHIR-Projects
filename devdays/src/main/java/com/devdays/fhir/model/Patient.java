@@ -16,11 +16,16 @@ public class Patient {
 	 * The patient id used for querying FHIR services.
 	 */
 	private String id;
-
+	
 	/**
-	 * The full name of the patient.
+	 * The given name of the patient.
 	 */
-	private String name;
+	private String givenName;
+	
+	/**
+	 * The family name of the patient.
+	 */
+	private String familyName;
 
 	/**
 	 * The patient date of birth.
@@ -35,12 +40,20 @@ public class Patient {
 		this.id = string;
 	}
 
-	public String getName() {
-		return name;
+	public String getGivenName() {
+		return givenName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setGivenName(String givenName) {
+		this.givenName = givenName;
+	}
+
+	public String getFamilyName() {
+		return familyName;
+	}
+
+	public void setFamilyName(String familyName) {
+		this.familyName = familyName;
 	}
 
 	public LocalDate getDob() {
@@ -49,5 +62,9 @@ public class Patient {
 
 	public void setDob(LocalDate dob) {
 		this.dob = dob;
+	}
+
+	public String getFullName() {
+		return this.getGivenName() + " " + this.getFamilyName();
 	}
 }
