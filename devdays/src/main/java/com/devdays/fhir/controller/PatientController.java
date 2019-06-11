@@ -46,6 +46,12 @@ public class PatientController {
 		return new ResponseEntity<String>(results, HttpStatus.OK);
 	}
 
+	/**
+	 * Creates a new patient from posted {@link Patient} object.
+	 * 
+	 * @param patient the {@link Patient}
+	 * @param ucBuilder a UriComponentsBuilder
+	 */
 	@PostMapping()
 	public ResponseEntity<Void> createPatient(@RequestBody Patient patient, UriComponentsBuilder ucBuilder) {
 		System.out.println("Creating Patient " + patient.getFullName());
