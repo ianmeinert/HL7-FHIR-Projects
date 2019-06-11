@@ -36,7 +36,7 @@ public class AllergyFinder implements IFinder {
 	 * creates the client connection.
 	 */
 	public AllergyFinder() {
-		ClientContext context = new ClientContext(SpringConfigurer.getContext());
+		this.context = new ClientContext(SpringConfigurer.getContext());
 		context.createClient(Constants.CLIENT_RESTFUL_URL);
 	}
 
@@ -81,5 +81,4 @@ public class AllergyFinder implements IFinder {
 
 		return gson.toJson(as);
 	}
-
 }
