@@ -1,5 +1,7 @@
 package com.devdays.fhir.controller;
 
+import java.util.Collection;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devdays.fhir.configuration.Constants;
+import com.devdays.fhir.model.Allergy;
 import com.devdays.fhir.service.AllergyFinder;
 
 /**
@@ -29,14 +32,14 @@ public class AllergyController {
 	 * @return String in Json format
 	 */
 	@GetMapping()
-	public ResponseEntity<String> getPatientAllergies(@RequestParam(name="patient", required=true) String patientId) {
+	public ResponseEntity<Collection<Allergy>> getPatientAllergies(@RequestParam(name="patient", required=true) String patientId) {
 		AllergyFinder finder = new AllergyFinder();
-		String results = finder.find(patientId);
+		Collection<Allergy> results = finder.read(patientId);
 
 		if (results.isEmpty()) {
-			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Collection<Allergy>>(HttpStatus.NOT_FOUND);
 		}
 
-		return new ResponseEntity<String>(results, HttpStatus.OK);
+		return new ResponseEntity<Collection<Allergy>>(results, HttpStatus.OK);
 	}
 }

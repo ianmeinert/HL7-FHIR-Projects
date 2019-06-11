@@ -15,8 +15,6 @@ import com.devdays.fhir.configuration.SpringConfigurer;
 import com.devdays.fhir.model.Allergy;
 import com.devdays.fhir.model.Reaction;
 import com.devdays.fhir.utilities.StringUtility;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 /**
  * The PatientFinder class contains the CRUD for the patient.
@@ -24,7 +22,7 @@ import com.google.gson.GsonBuilder;
  * @author Ian Meinert
  *
  */
-public class AllergyFinder implements IFinder {
+public class AllergyFinder implements ICrud<Collection<Allergy>> {
 
 	/**
 	 * The {@link ClientContext}.
@@ -44,8 +42,7 @@ public class AllergyFinder implements IFinder {
 	 * This method translates the client {@link AllergyIntolerance} search into the
 	 * applications internal {@link Allergy} model.
 	 */
-	public String find(String id) {
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+	public Collection<Allergy> read(String id) {
 		Bundle bundle = context.searchAllergies(id);
 
 		Collection<Allergy> as = new ArrayList<Allergy>();
@@ -79,6 +76,17 @@ public class AllergyFinder implements IFinder {
 			as.add(a);
 		}
 
-		return gson.toJson(as);
+		return as;
+	}
+
+
+	public void create(Collection<Allergy> t) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void update(Collection<Allergy> t) {
+		// TODO Auto-generated method stub
+		
 	}
 }

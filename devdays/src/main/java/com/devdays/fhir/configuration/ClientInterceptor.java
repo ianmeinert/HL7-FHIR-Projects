@@ -21,6 +21,17 @@ public class ClientInterceptor {
 	 */
 	@Hook(Pointcut.CLIENT_REQUEST)
 	public void interceptRequest(MethodOutcome outcome) {
-		System.out.println(String.format("Client request: %s", outcome.getResponseHeaders()));
+		//FIXME get the request header
+		System.out.println(String.format("Client request: %s", new String()));
+	}
+	
+	/**
+	 * This method intercepts the client response to log the outcome.
+	 * 
+	 * @param outcome the {@link MethodOutcome}s
+	 */
+	@Hook(Pointcut.CLIENT_RESPONSE)
+	public void interceptResponse(MethodOutcome outcome) {
+		System.out.println(String.format("Client response: %s", outcome.getResponseHeaders()));
 	}
 }

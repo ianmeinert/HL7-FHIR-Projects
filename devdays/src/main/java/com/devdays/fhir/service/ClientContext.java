@@ -60,14 +60,19 @@ public class ClientContext {
 	 */
 	public Patient readPatient(String id) {
 		// Read a patient with the given ID
-		return client.read().resource(Patient.class).withId(id).execute();
+		return client.read()
+				.resource(Patient.class)
+				.withId(id)
+				.execute();
 	}
 
 	public String createPatient(Patient patient) {
 
 		// Invoke the server create method (and send pretty-printed JSON encoding to the
 		// server instead of the default which is non-pretty printed XML)
-		MethodOutcome outcome = client.create().resource(patient).execute();
+		MethodOutcome outcome = client.create()
+				.resource(patient)
+				.execute();
 
 		// log the outcome using the ClientInterceptor
 		this.setLoggingInterceptor(outcome);
@@ -90,15 +95,20 @@ public class ClientContext {
 				.where(new StringClientParam("_id").matches().value(id))
 				// the AllergyIntolerance resource references other resources...request those
 				// resources be returned in the bundle for later reference.
-				.include(new Include("AllergyIntolerance:asserter")).include(new Include("AllergyIntolerance:patient"))
-				.include(new Include("AllergyIntolerance:recorder")).returnBundle(Bundle.class).execute();
+				.include(new Include("AllergyIntolerance:asserter"))
+				.include(new Include("AllergyIntolerance:patient"))
+				.include(new Include("AllergyIntolerance:recorder"))
+				.returnBundle(Bundle.class)
+				.execute();
 
 		return bundle;
 	}
 
 	public void updatePatient(Patient fp) {
 		// Invoke the server update method
-		MethodOutcome outcome = client.update().resource(fp).execute();
+		MethodOutcome outcome = client.update()
+				.resource(fp)
+				.execute();
 
 		IIdType id = outcome.getId();
 		System.out.println("Updated ID: " + id.getValue());
@@ -112,6 +122,6 @@ public class ClientContext {
 	 */
 	private void setLoggingInterceptor(MethodOutcome outcome) {
 		ClientInterceptor interceptor = new ClientInterceptor();
-		interceptor.interceptRequest(outcome);
+		interceptor.interceptResponse(outcome);
 	}
 }

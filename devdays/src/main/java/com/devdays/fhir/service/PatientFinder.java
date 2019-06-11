@@ -16,7 +16,7 @@ import com.devdays.fhir.utilities.DateUtility;
  * @author Ian Meinert
  *
  */
-public class PatientFinder implements IFinder<Patient> {
+public class PatientFinder implements ICrud<Patient> {
 
 	/**
 	 * The {@link ClientContext}.
@@ -38,7 +38,7 @@ public class PatientFinder implements IFinder<Patient> {
 	 * 
 	 * @return {@link Patient} patient
 	 */
-	public Patient find(String id) {
+	public Patient read(String id) {
 		org.hl7.fhir.r4.model.Patient fp = context.readPatient(id);
 
 		Patient p = new Patient();
@@ -65,7 +65,7 @@ public class PatientFinder implements IFinder<Patient> {
 	 * 
 	 * @param patient the {@link Patient}
 	 */
-	public void createPatient(Patient patient) {
+	public void create(Patient patient) {
 		org.hl7.fhir.r4.model.Patient fp = new org.hl7.fhir.r4.model.Patient();
 
 		// ..populate the patient object.
@@ -80,7 +80,12 @@ public class PatientFinder implements IFinder<Patient> {
 		patient.setId(id);
 	}
 
-	public void updatePatient(Patient patient) {
+	/**
+	 * This method updates an existing {@link org.hl7.fhir.r4.model.Patient}.
+	 * 
+	 * @param patient the {@link Patient}
+	 */
+	public void update(Patient patient) {
 		org.hl7.fhir.r4.model.Patient fp = context.readPatient(patient.getId());
 
 		if (!fp.hasIdentifier()) {

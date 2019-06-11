@@ -38,7 +38,7 @@ public class PatientController {
 	@GetMapping(value = Constants.ENTRY_PATH_PATIENT_ID, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getPatient(@PathVariable String id) {
 		PatientFinder finder = new PatientFinder();
-		Patient results = finder.find(id);
+		Patient results = finder.read(id);
 
 		if (results.equals(new Patient())) {
 			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
@@ -58,7 +58,7 @@ public class PatientController {
 		System.out.println("Creating Patient: " + patient.getFullName());
 		PatientFinder finder = new PatientFinder();
 
-		finder.createPatient(patient);
+		finder.create(patient);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("/patient/{id}").buildAndExpand(patient.getId()).toUri());
@@ -78,14 +78,14 @@ public class PatientController {
 		System.out.println("Updating Patient: " + patient.getFullName());
 		PatientFinder finder = new PatientFinder();
 
-		Patient currentPatient = finder.find(id);
+		Patient currentPatient = finder.read(id);
 
 		if (currentPatient.equals(new Patient())) {
 			System.out.println("User with id " + id + " not found");
 			return new ResponseEntity<Patient>(HttpStatus.NOT_FOUND);
 		}
 
-		finder.updatePatient(patient);
+		finder.update(patient);
 
 		return new ResponseEntity<Patient>(patient, HttpStatus.ACCEPTED);
 	}
