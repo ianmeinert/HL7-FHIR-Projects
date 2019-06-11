@@ -3,6 +3,8 @@ package com.devdays.fhir.model;
 import java.time.LocalDate;
 
 import com.devdays.fhir.model.Patient;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * This class represents an interpretation of the FHIR {@link Patient} resource.
@@ -66,5 +68,11 @@ public class Patient {
 
 	public String getFullName() {
 		return this.getGivenName() + " " + this.getFamilyName();
+	}
+	
+	@Override
+	public String toString() {
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		return gson.toJson(this);
 	}
 }

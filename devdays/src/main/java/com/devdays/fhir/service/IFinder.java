@@ -6,7 +6,7 @@ package com.devdays.fhir.service;
  * @author Ian Meinert
  *
  */
-public interface IFinder {
+public interface IFinder<T> {
 
 	/**
 	 * The read operation.
@@ -14,5 +14,5 @@ public interface IFinder {
 	 * @param id the resource id.
 	 * @return
 	 */
-	public String find(String id);
+	public T find(String id);
 }

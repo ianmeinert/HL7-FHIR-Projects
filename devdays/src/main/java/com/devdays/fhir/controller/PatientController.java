@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,23 +38,23 @@ public class PatientController {
 	@GetMapping(value = Constants.ENTRY_PATH_PATIENT_ID, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> getPatient(@PathVariable String id) {
 		PatientFinder finder = new PatientFinder();
-		String results = finder.find(id);
+		Patient results = finder.find(id);
 
-		if (results.isEmpty()) {
+		if (results.equals(new Patient())) {
 			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
 		}
 
-		return new ResponseEntity<String>(results, HttpStatus.OK);
+		return new ResponseEntity<String>(results.toString(), HttpStatus.OK);
 	}
 
 	/**
 	 * Creates a new patient from posted {@link Patient} object.
 	 * 
-	 * @param patient the {@link Patient}
+	 * @param patient   the {@link Patient}
 	 * @param ucBuilder a UriComponentsBuilder
 	 */
 	@PostMapping()
-	public ResponseEntity<String> createPatient(@RequestBody Patient patient, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<Void> createPatient(@RequestBody Patient patient, UriComponentsBuilder ucBuilder) {
 		System.out.println("Creating Patient: " + patient.getFullName());
 		PatientFinder finder = new PatientFinder();
 
@@ -61,7 +62,31 @@ public class PatientController {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("/patient/{id}").buildAndExpand(patient.getId()).toUri());
-		
-		return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+
+		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+	}
+
+	/**
+	 * Updates an existing patient from posted {@link Patient} object.
+	 * 
+	 * @param id      String path variable
+	 * @param patient {@link Patient} model
+	 * @return String in Json format
+	 */
+	@PutMapping(value = Constants.ENTRY_PATH_PATIENT_ID, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Patient> updatePatient(@PathVariable String id, @RequestBody Patient patient) {
+		System.out.println("Updating Patient: " + patient.getFullName());
+		PatientFinder finder = new PatientFinder();
+
+		Patient currentPatient = finder.find(id);
+
+		if (currentPatient.equals(new Patient())) {
+			System.out.println("User with id " + id + " not found");
+			return new ResponseEntity<Patient>(HttpStatus.NOT_FOUND);
+		}
+
+		finder.updatePatient(patient);
+
+		return new ResponseEntity<Patient>(patient, HttpStatus.ACCEPTED);
 	}
 }
