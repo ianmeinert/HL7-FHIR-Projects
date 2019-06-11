@@ -1,0 +1,90 @@
+{
+	"info": {
+		"_postman_id": "0943553a-e928-4585-aba2-83a00e1b0b0a",
+		"name": "FHIR",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:8080/patient",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"givenName\": \"Veteol\",\n\t\"familyName\": \"Schofferhofer\",\n\t\"dob\": \"1980-06-14\"\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/patient",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"patient"
+					]
+				},
+				"description": "Test FHIR create patient"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/patient/22048",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"id\": \"22048\",\n\t\"givenName\": \"Veteol Bier\",\n\t\"familyName\": \"Weis-Schofferhofer\",\n\t\"dob\": \"1980-06-14\"\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/patient/22048",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"patient",
+						"22048"
+					]
+				},
+				"description": "PUT a patient update"
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:8080/patient/22048",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/patient/22048",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"patient",
+						"22048"
+					]
+				},
+				"description": "GET a patient"
+			},
+			"response": []
+		}
+	]
+}
